@@ -2,7 +2,6 @@ import { fetchSegmentLeaderboard } from "../api/segmentLeaderboard";
 import { authorizationParametersFromEnv } from "../api/common";
 import { uniq } from "lodash";
 import { fetchAndWrite, readTiles } from "../storage";
-import { promises as fs } from "fs";
 
 async function main() {
   const tiles = await readTiles();
