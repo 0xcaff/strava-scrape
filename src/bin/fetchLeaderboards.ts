@@ -1,21 +1,30 @@
 import { fetchSegmentLeaderboard } from "../api/segmentLeaderboard";
 import { authorizationParametersFromEnv } from "../api/common";
+import { uniq } from "lodash";
+import { readTiles } from "../storage";
+import { promises as fs } from "fs";
 
 async function main() {
-    // todo: probably fetch all the cuts
-  const response = await fetchSegmentLeaderboard(
-    {
-      segmentId: "26456715",
-      athleteId: "39822683",
-        // ageGroup: '20_24',
-        // gender: 'M',
-        // weightClass: '125_149',
-        // dateRange: 'this_year'
-    },
-    authorizationParametersFromEnv()
-  );
+  const tiles = await readTiles();
+  const segmentIdentifiers = uniq(tiles.map((tile) => tile.id));
 
-  console.log(response);
+  for (const [idx, segmentId] of segmentIdentifiers.entries()) {
+    console.log({ idx, len: segmentIdentifiers.length });
+
+    const response = await fetchSegmentLeaderboard(
+      {
+        segmentId: segmentId.toString(),
+        athleteId: "39822683",
+          ageGroup: '20_24',
+      },
+      authorizationParametersFromEnv()
+    );
+
+    await fs.writeFile(
+      `./data/segments/${segmentId}.json`,
+      JSON.stringify(response)
+    );
+  }
 }
 
 main();

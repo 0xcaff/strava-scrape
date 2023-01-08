@@ -14,7 +14,7 @@ type SegmentLeaderboardParams = {
   ageGroup?: "20_24";
   clubId?: string;
   following?: boolean;
-  dateRange?: "this_year";
+  dateRange?: "this_year" | 'this_month';
 };
 
 export async function fetchSegmentLeaderboard(
@@ -67,7 +67,12 @@ export async function fetchSegmentLeaderboard(
     },
   });
 
-  return response.json();
+  const body = await response.json();
+  if (body.errors) {
+      throw new Error(JSON.stringify(body));
+  }
+
+  return body;
 }
 
 function defaultHeaders() {
