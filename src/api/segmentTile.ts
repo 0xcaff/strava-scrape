@@ -7,7 +7,7 @@ import {
   headersForAuthorization,
 } from "./common";
 
-export type SegmentTileParameters = {
+export type SegmentTileParams = {
   z: number;
   x: number;
   y: number;
@@ -15,7 +15,7 @@ export type SegmentTileParameters = {
 };
 
 export async function fetchSegmentTile(
-  { athleteId, z, x, y }: SegmentTileParameters,
+  { athleteId, z, x, y }: SegmentTileParams,
   auth: AuthorizationParameters
 ): Promise<VectorTile | null> {
   const searchParams = new URLSearchParams([
@@ -31,7 +31,7 @@ export async function fetchSegmentTile(
     baseUrl
   );
 
-  const response = await fetch(url.toString(), {
+  const response = await fetch(url, {
     headers: {
       ...headersForAuthorization(auth),
       "accept-encoding": "gzip",

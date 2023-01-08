@@ -3,7 +3,9 @@
   "private": true,
   "repository": "git@github.com:0xcaff/strava-scrape.git",
   "scripts": {
-    "fetchTiles": "ts-node src/bin/fetchTiles.ts"
+    "fetchTiles": "ts-node src/bin/fetchTiles.ts",
+    "groupTiles": "ts-node src/bin/groupTiles.ts",
+    "fetchLeaderbaords": "ts-node src/bin/fetchLeaderboards.ts"
   },
   "dependencies": {
     "@mapbox/vector-tile": "^1.3.1",
