@@ -19,8 +19,8 @@ async function main() {
   const athleteId = "39822683";
 
   const totalSize =
-    (topLeftBound.x - bottomRightBound.x + 1) *
-    (topLeftBound.y - bottomRightBound.y + 1);
+    (topLeftBound.x - bottomRightBound.x - 1) *
+    (topLeftBound.y - bottomRightBound.y - 1);
   let index = 0;
 
   for (let x = topLeftBound.x; x <= bottomRightBound.x; x++) {
@@ -41,7 +41,7 @@ async function main() {
         const segments = Array(tile.layers.segments.length)
           .fill(0)
           // @ts-ignore
-          .map((value, idx) => tile.layers.segments.feature(idx).toGeoJSON());
+          .map((value, idx) => tile.layers.segments.feature(idx).toGeoJSON(x, y, z));
 
         await fs.writeFile(
           `./data/tiles/${z}-${x}-${y}.json`,
