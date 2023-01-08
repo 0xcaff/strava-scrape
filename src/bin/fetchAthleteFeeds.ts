@@ -1,7 +1,6 @@
-import { readAtheleteIds } from "../storage";
+import { fetchAndWrite, readAtheleteIds } from "../storage";
 import { fetchAthleteFeed } from "../api/atheletes";
 import { authorizationParametersFromEnv } from "../api/common";
-import { promises as fs } from "fs";
 
 export async function main() {
   const athleteIds = await readAtheleteIds();
@@ -10,11 +9,8 @@ export async function main() {
   for (const [idx, athleteId] of athleteIds.entries()) {
     console.log({ idx, len: athleteIds.length });
 
-    const feed = await fetchAthleteFeed(athleteId.toString(), auth);
-
-    await fs.writeFile(
-      `./data/feed/athlete/${athleteId}.json`,
-      JSON.stringify(feed)
+    await fetchAndWrite(`./data/feed/athlete/${athleteId}.json`, () =>
+      fetchAthleteFeed(athleteId.toString(), auth)
     );
   }
 }

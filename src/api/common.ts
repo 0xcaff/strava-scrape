@@ -36,9 +36,17 @@ export function clientHeaders() {
 }
 
 export async function handleResponse(response: Response) {
-  const body = await response.json();
+  const text = await response.text();
+  const body = (() => {
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      throw new Error(text);
+    }
+  })();
+
   if (body.errors) {
-    throw new Error(JSON.stringify(body));
+    throw new Error(text);
   }
 
   return body;
