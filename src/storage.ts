@@ -3,6 +3,10 @@ import path from "path";
 import { uniq } from "lodash";
 
 async function readJsonDirectory(directory: string) {
+  return (await readJsonDirectoryWithFiles(directory)).map(([it]) => it);
+}
+
+async function readJsonDirectoryWithFiles(directory: string) {
   const files = await fs.readdir(directory);
   return await Promise.all(
     files.map(async (file) => {
@@ -10,7 +14,7 @@ async function readJsonDirectory(directory: string) {
         encoding: "utf-8",
       });
 
-      return JSON.parse(contents);
+      return [JSON.parse(contents), file.replace(".json", "")];
     })
   );
 }
@@ -53,4 +57,8 @@ export async function fetchAndWrite(path: string, fetchFn: () => any) {
   }
 
   await fs.writeFile(path, JSON.stringify(await fetchFn()));
+}
+
+export async function readAthleteStats() {
+  return await readJsonDirectoryWithFiles("./data/athlete/stats");
 }
